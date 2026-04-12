@@ -1,0 +1,9 @@
+{
+  "name": "licencjat-wne",
+  "version": "1.0.0",
+  "description": "WNE UW licencjat thesis refinement pipeline: parallel macro-audit, deep analysis, section writing, and viva simulation. 7 skills, 17 agents. Calibrated for economics / political science / political economy at WNE UW.",
+  "author": {
+    "name": "maciej"
+  },
+  "keywords": ["thesis", "licencjat", "wne", "economics", "political-science", "academic", "polish"]
+}
