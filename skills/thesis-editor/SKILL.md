@@ -1,9 +1,9 @@
 ---
 name: thesis-editor
-description: "Use this skill when the user has a diagnosed list of problems (from thesis-analyzer, thesis-macro-auditor, or thesis-reviewer) and is ready to implement specific changes. This is the ONLY skill that modifies text. Triggers on: 'popraw to', 'wprowadz te zmiany', 'zrob korekte', 'zaaplikuj sugestie #N', 'edytuj ten fragment', 'skroc ten akapit'. Never triggers without a prior diagnosis list. Works on maximum 800-1000 words per session. Produces a change-log for every edit. Can dispatch prose-polisher-wne for a final polish pass. Always respond in the same language the user writes in."
+description: "Run this skill when you have a diagnosed list of problems and are ready to implement specific changes. This is the ONLY skill that modifies text. Triggers on: 'popraw to', 'wprowadz te zmiany', 'zrob korekte', 'zaaplikuj sugestie #N', 'edytuj ten fragment', 'skroc ten akapit'. Never triggers without a prior diagnosis list from thesis-analyzer, thesis-macro-auditor, or thesis-reviewer. Works on maximum 800-1000 words per session. Produces a change-log for every edit. Can dispatch prose-polisher-wne for a final polish pass. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
-  pipeline_position: "5 — after thesis-analyzer; produces edited text for thesis-reviewer"
+  pipeline_position: "STAN 4 — after thesis-analyzer or thesis-macro-auditor; before thesis-reviewer"
 ---
 
 # Thesis Editor
@@ -38,7 +38,7 @@ Deletion of any sentence or more is always Type C or D and requires explicit use
 > "Potwierdzam: usunę następujący fragment: '[cytat]'. Czy to poprawne?"
 Do not proceed until the answer is unambiguous. When in doubt, do not delete — flag as "WYMAGA DECYZJI AUTORA" instead.
 
-**Rule 5 — Preserve author voice.**
+**Rule 6 — Preserve author voice.**
 The changed text should sound like a better version of the same author, not a different author. Signs of voice violation to avoid: switching the author's characteristic passive/active ratio; adding hedging where the author was appropriately direct; replacing discipline-specific terminology with generic synonyms; making the text sound "AI-smooth" (uniform sentence length, formulaic transitions, em-dash overuse).
 
 ---
@@ -121,6 +121,24 @@ PRZED: "[oryginalne brzmienie]"
 PO:    "[zmienione brzmienie]"
 UZASADNIENIE: [1 zdanie: dlaczego ta zmiana rozwiązuje zdiagnozowany problem]
 ```
+
+### Handling M-prefix findings (macro-structural changes)
+
+Findings with the `M` prefix from `thesis-macro-auditor` often concern the thesis *between* sections — missing transitions, missing sections, or content that needs to be moved. These require a different approach than local edits:
+
+**M-findings that require new content not in the current fragment** (e.g. "add a transition paragraph between chapters 2 and 3"):
+- Do not attempt to insert the new content into the pasted fragment
+- Produce the new content as a standalone block with a "WSTAW PO [last sentence of section X]" instruction
+- Log it in the change-log as Type D with the insertion point clearly stated
+
+**M-findings that require content removal or restructuring across section boundaries** (e.g. "move paragraph from Methodology to Results"):
+- Do not execute the move — flag as WYMAGA DECYZJI AUTORA
+- State exactly: what to move, from where, to where, and why
+- The author implements the move in Word; this skill does not have access to the full thesis
+
+**M-findings that are local to the pasted fragment** (e.g. "your introduction lacks a gap statement"):
+- Treat as Type C or D and handle normally
+- If new content is required, apply Rule 4 (get approval before adding)
 
 ### Unresolvable problems
 

@@ -1,7 +1,7 @@
 ---
 name: wne-supervisor-agent
 description: Simulates a standard WNE UW promotor review of a licencjat thesis — checks formal compliance with Zalacznik B requirements and content/argumentation quality. Dispatched by thesis-reviewer in Standard mode.
-model: opus
+model: sonnet
 color: blue
 tools: []
 ---

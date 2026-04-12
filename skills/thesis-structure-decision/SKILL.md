@@ -1,9 +1,9 @@
 ---
 name: thesis-structure-decision
-description: "Use this skill immediately after thesis-reference-calibrator and before any editing or deep analysis begins. Triggers when the user needs to decide what to do with their thesis material — 'czy powinienem oddac tylko czesc modelowa', 'co zrobic z case study', 'jak to wszystko polaczyc', 'czy case study nadaje sie jako appendiks', 'co powinienem wyciąc'. Also triggers when the user uploads a thesis draft and asks for structural assessment before editing. Produces one clear structural recommendation. Always respond in the same language the user writes in."
+description: "STAN 1 — decides thesis structure. Call thesis-pipeline first to orient yourself; it will route here. Call this skill directly only when the user explicitly needs a structural decision: 'czy powinienem oddac tylko czesc modelowa', 'co zrobic z case study', 'jak to wszystko polaczyc', 'czy case study nadaje sie jako appendiks', 'co powinienem wyciąc', 'jaka powinna byc struktura mojej pracy'. Also triggers when the user uploads a thesis draft and asks for structural assessment. Requires rubric from thesis-reference-calibrator. Produces one clear structural recommendation. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
-  pipeline_position: "2 — after thesis-reference-calibrator, before thesis-macro-auditor"
+  pipeline_position: "STAN 1 — after thesis-reference-calibrator, before thesis-macro-auditor"
 ---
 
 # Thesis Structure Decision

@@ -1,9 +1,9 @@
 ---
 name: thesis-section-writer
-description: "Use this skill when the user needs to write a new section from scratch — a missing section, case study, or additional chapter not yet present in the thesis. Triggers on: 'napisz sekcje o', 'potrzebuje napisac case study', 'brakuje mi rozdzialu o', 'napisz wstep', 'napisz wnioski', 'write the political case study section', 'draft the methodology section'. Dispatches literature-gap-finder and section-drafter-wne in sequence, optionally adds prose-polisher-wne. Calibrated for WNE UW economics and political science in Word format. Always respond in the same language the user writes in."
+description: "Run this skill when you need to write a new section from scratch — a missing section, case study, or additional chapter not yet present in the thesis. Available at any pipeline stage. Triggers on: 'napisz sekcje o', 'potrzebuje napisac case study', 'brakuje mi rozdzialu o', 'napisz wstep', 'napisz wnioski', 'write the political case study section', 'draft the methodology section'. Requires rubric from thesis-reference-calibrator. Dispatches literature-gap-finder and section-drafter-wne in sequence, optionally adds prose-polisher-wne. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
-  pipeline_position: "parallel — can run alongside or after thesis-macro-auditor to fill structural gaps"
+  pipeline_position: "AD-HOC — available at any pipeline stage"
 ---
 
 # Thesis Section Writer

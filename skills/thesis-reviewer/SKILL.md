@@ -1,9 +1,9 @@
 ---
 name: thesis-reviewer
-description: "Use this skill after thesis-analyzer and thesis-editor have been applied, when the thesis is close to submission-ready. Triggers on: 'czy praca jest gotowa do oddania?', 'co powie promotor?', 'zrob recenzje', 'sprawdz jak wyglada od zewnatrz', 'co jeszcze moze mi promotor wytknac', 'przejrzyj jak recenzent'. Three modes: Standard review (WNE promotor simulation), Hostile reviewer (three weakest points), Viva simulation (6 defence questions). Dispatches review agents based on mode. Requires quality rubric from thesis-reference-calibrator. Always respond in the same language the user writes in."
+description: "Run this skill when the thesis is close to submission-ready and you want a final review or defence simulation. Triggers on: 'czy praca jest gotowa do oddania?', 'co powie promotor?', 'zrob recenzje', 'sprawdz jak wyglada od zewnatrz', 'co jeszcze moze mi promotor wytknac', 'przejrzyj jak recenzent', 'symuluj obrone'. Requires quality rubric from thesis-reference-calibrator. Four modes: Standard review (WNE promotor simulation), Hostile reviewer (three weakest points), Viva simulation (6 defence questions), Bibliography check. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
-  pipeline_position: "6 — after thesis-editor; final review before submission"
+  pipeline_position: "STAN 5 — after thesis-editor; final review before submission"
 ---
 
 # Thesis Reviewer

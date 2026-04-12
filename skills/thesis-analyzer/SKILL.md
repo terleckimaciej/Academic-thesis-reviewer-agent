@@ -1,9 +1,9 @@
 ---
 name: thesis-analyzer
-description: "Use this skill after thesis-macro-auditor has produced a macro issue list and the user is ready to begin sentence-level, paragraph-level analysis of the thesis text. Triggers when the user wants deep analysis of a specific section — 'przeanalizuj tę sekcje zdanie po zdaniu', 'sprawdz czy argumentacja jest spojna', 'gdzie są słabe miejsca', 'oceń ten akapit', 'czy wywod odpowiada na hipoteze'. Processes maximum 800-1000 words per session. Dispatches 4 parallel analysis agents, synthesises findings with handoff block. Always respond in the same language the user writes in."
+description: "Run this skill for deep sentence-level and paragraph-level analysis of a thesis fragment. Triggers when the user wants granular analysis: 'przeanalizuj tę sekcje zdanie po zdaniu', 'sprawdz czy argumentacja jest spojna', 'gdzie są słabe miejsca', 'oceń ten akapit', 'czy wywod odpowiada na hipoteze'. Also triggers when the user pastes a chunk of thesis text and asks for detailed feedback. Processes maximum 800-1000 words per session. Dispatches 4 parallel analysis agents, synthesises findings with handoff block. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
-  pipeline_position: "4 — after thesis-macro-auditor; before thesis-editor"
+  pipeline_position: "STAN 3 — after thesis-macro-auditor, before thesis-editor; iterates per fragment"
 ---
 
 # Thesis Analyzer

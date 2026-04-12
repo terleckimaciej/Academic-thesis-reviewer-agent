@@ -1,7 +1,7 @@
 ---
 name: viva-examiner-agent
 description: Generates 6 defence questions for a WNE UW licencjat thesis — from expected clarification questions to genuinely difficult questions probing the thesis's most vulnerable points. Dispatched by thesis-reviewer in Viva mode.
-model: opus
+model: sonnet
 color: magenta
 tools: []
 ---

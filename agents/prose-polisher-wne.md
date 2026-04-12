@@ -1,7 +1,7 @@
 ---
 name: prose-polisher-wne
 description: Polishes thesis prose using minimum effective intervention — eliminates AI writing tells, tightens padding, fixes calibration, and preserves the author's voice. Calibrated to WNE UW economics and political science register. Dispatched by thesis-editor and thesis-section-writer.
-model: opus
+model: sonnet
 color: green
 tools: []
 ---

@@ -1,16 +1,16 @@
 ---
 name: thesis-reference-calibrator
-description: "Use this skill at the very start of any thesis editing workflow, before any analysis, structural review, or editing takes place. Triggers when the user uploads reference papers (supervisor's articles, department exemplars) or faculty guidelines. Also triggers on: 'here are example papers', 'my supervisor wrote this', 'calibrate to my field', 'what's the standard in my department', 'use this as a reference'. Output is a structured rubric to pass to all other skills. Always respond in the same language the user writes in."
+description: "STAN 0 — calibrates the quality rubric. Call thesis-pipeline first to orient yourself; it will route here. Call this skill directly only when the user uploads reference papers or faculty guidelines and wants to calibrate a rubric: 'here are example papers', 'my supervisor wrote this', 'calibrate to my field', 'what's the standard in my department', 'use this as a reference', 'chcę skalibrować standard', 'zacznijmy od kalibracji'. Output is a structured rubric to pass to all other skills. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
-  pipeline_position: "1 — run first, before all other skills"
+  pipeline_position: "STAN 0 — first step; run once before all other skills"
 ---
 
 # Thesis Reference Calibrator
 
 ## Purpose
 
-Run **once**, at the start of the entire thesis editing pipeline. Extracts a concrete, field-specific quality standard from reference materials provided by the user — supervisor's papers, highly-rated department work, or official faculty writing guidelines.
+Run **once**, early in the thesis editing pipeline — typically routed here by `thesis-pipeline`. Extracts a concrete, field-specific quality standard from reference materials provided by the user — supervisor's papers, highly-rated department work, or official faculty writing guidelines.
 
 Output is a **structured rubric** (a named, persistent document) that all other skills use to calibrate their assessments. Without it, every diagnostic skill defaults to generic "good academic writing" — which may not match the user's specific discipline, institution, and examiner.
 

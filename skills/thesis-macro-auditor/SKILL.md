@@ -1,9 +1,9 @@
 ---
 name: thesis-macro-auditor
-description: "Use this skill after thesis-structure-decision has been completed and before any sentence-level analysis begins. Triggers on: 'czy moja praca jest dobrze zbudowana?', 'czy struktura ma sens?', 'co brakuje calosci?', 'zrob przeglad struktury', 'oceń układ pracy'. Works on table of contents plus first and last sentence of each section only — never on full text. Dispatches 6 parallel structural agents, synthesises their output into a prioritised macro issue list. Always respond in the same language the user writes in."
+description: "Run this skill for a bird's-eye assessment of the thesis architecture — whether sections fulfill their roles, whether the logical order holds, what is missing or redundant, where transitions fail. Call at any point when you want to zoom out from sentence-level work and look at the whole structure. Triggers on: 'czy moja praca jest dobrze zbudowana?', 'czy struktura ma sens?', 'co brakuje calosci?', 'zrob przeglad struktury', 'oceń układ pracy', 'chcę zobaczyć całość z lotu ptaka', 'sprawdź ogólną strukturę'. Works on table of contents plus first and last sentence of each section only — never on full text. Dispatches 6 parallel structural agents. Can be called after deep micro-analysis to recheck the macro view. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
-  pipeline_position: "3 — after thesis-structure-decision, before thesis-analyzer"
+  pipeline_position: "STAN 2 — after thesis-structure-decision, before thesis-analyzer; re-callable at any stage to recheck macro structure"
 ---
 
 # Thesis Macro Auditor
@@ -166,8 +166,14 @@ SPÓJNOŚĆ MIĘDZY ROZDZIAŁAMI
 [Jeśli cross-chapter-auditor był uruchomiony: przedstaw jego findings z prefiksem X tu, po raporcie sekcji.]
 [Jeśli nie był uruchomiony: "Cross-chapter audit: pominięty — praca jednostrukturalna."]
 
-NASTĘPNY KROK: thesis-analyzer
-(analiza akapit po akapicie, sekcja po sekcji — zacznij od sekcji z BLOKUJĄCYMI problemami)
+NASTĘPNY KROK:
+[Jeśli to pierwsza sesja makro-audytu:]
+→ thesis-analyzer (analiza mikro, zacznij od sekcji z BLOKUJĄCYMI problemami)
+[Jeśli wracasz do makro-audytu po wcześniejszych sesjach analizy/edycji:]
+→ thesis-editor (zaadresuj BLOKUJĄCE problemy M-prefix z tej sesji), lub
+→ thesis-analyzer (kontynuuj analizę kolejnych sekcji jeśli nie ma BLOKUJĄCYCH)
+[Jeśli praca nie ma BLOKUJĄCYCH i wszystkie sekcje przeanalizowane:]
+→ thesis-reviewer (recenzja końcowa)
 ═══════════════════════════════════════════════
 ```
 
