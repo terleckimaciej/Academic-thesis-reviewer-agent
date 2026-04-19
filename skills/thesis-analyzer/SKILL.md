@@ -1,6 +1,6 @@
 ---
 name: thesis-analyzer
-description: "Run this skill for deep sentence-level and paragraph-level analysis of a thesis fragment. Triggers when the user wants granular analysis: 'przeanalizuj tę sekcje zdanie po zdaniu', 'sprawdz czy argumentacja jest spojna', 'gdzie są słabe miejsca', 'oceń ten akapit', 'czy wywod odpowiada na hipoteze'. Also triggers when the user pastes a chunk of thesis text and asks for detailed feedback. Processes maximum 800-1000 words per session. Dispatches 4 parallel analysis agents, synthesises findings with handoff block. Always respond in the same language the user writes in."
+description: "Run this skill for deep sentence-level and paragraph-level analysis of a thesis fragment. Triggers when the user wants granular analysis: 'przeanalizuj tę sekcje zdanie po zdaniu', 'sprawdz czy argumentacja jest spojna', 'gdzie są słabe miejsca', 'oceń ten akapit', 'czy wywod odpowiada na hipoteze'. Also triggers when the user pastes a chunk of thesis text (or LaTeX source) and asks for detailed feedback. Processes maximum 800-1000 words per session. Can read .tex file directly from the mounted project folder. Dispatches 4 parallel analysis agents, synthesises findings with handoff block. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
   pipeline_position: "STAN 3 — after thesis-macro-auditor, before thesis-editor; iterates per fragment"
@@ -21,10 +21,16 @@ Performs **granular, exhaustive diagnostic analysis** of thesis text — sentenc
 ## Non-negotiable operating constraints
 
 **Rule 1 — Fragment limit: 800–1000 words per session.**
-Do not accept more than approximately 1000 words of thesis text for analysis in a single session. If the user pastes more:
+Do not accept more than approximately 1000 words of thesis text for analysis in a single session. The user provides the fragment either by:
+- **Pasting LaTeX source** from the `.tex` file directly into the chat — analyse the prose content (ignore LaTeX commands when counting words, but preserve them in all findings and output)
+- **Asking Claude to read the file** — use the Read tool to load the relevant section from the mounted `.tex` file
+
+If the user provides more than ~1000 words:
 1. Acknowledge the full paste
 2. State: "I will analyse the first ~1000 words in this session. Please start a new session for the remainder."
 3. Proceed with the first 800–1000 words only.
+
+**LaTeX note:** When analysing LaTeX source, count only prose words (ignore commands like `\footnote{}`, `\emph{}`, `\section{}` etc.). Locate findings by referencing both the paragraph number (P1, P2...) AND a short plaintext quote — not LaTeX commands — so the author can find it in the source.
 
 **Rule 2 — Session briefing is mandatory.**
 Every session must begin with the user providing, in this order:
@@ -61,9 +67,12 @@ Beginning analysis of: [first few words of fragment]...
 
 ## Orchestration procedure
 
-### Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
+### Krok 0 — Załaduj session log, rubryk kalibracyjny i pryncypia akademickie
 
-**Przed wysłaniem agentów wykonaj dwa odczyty:**
+**Przed wysłaniem agentów wykonaj trzy odczyty:**
+
+**0. Session log (historia pracy):**
+Sprawdź czy plik `session-log.md` istnieje w folderze projektu. Jeśli tak — wczytaj go narzędziem Read. Wyciągnij z niego: (a) wyniki poprzednich sesji thesis-analyzer (skąd skończyłeś, jakie problemy zostały oznaczone), (b) blok handoff z ostatniej sesji (jeśli jest). Jeśli plik nie istnieje — kontynuuj bez niego. Jeśli folder nie jest zamontowany — zapytaj użytkownika czy ma blok handoff z poprzedniej sesji do wklejenia.
 
 **1. Rubryk kalibracyjny (opcjonalny plik projektu):**
 Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma:
@@ -131,9 +140,28 @@ Collect all four agent outputs. Then:
 2. **Sort** within each severity tier: C first (highest credibility risk), then H, then R, then E.
 3. **Merge duplicates** if two agents flagged the same sentence from different angles — create one entry that lists both labels (e.g., `C2 / R1`) and both diagnoses.
 
-### Step 4 — Produce handoff block
+### Step 4 — Produce handoff block and save to session log
 
 Always produce the handoff block, even if the session is short or the user does not ask for it.
+
+**Po dostarczeniu raportu i bloku handoff — dopisz wpis do `session-log.md`** (Edit tool — dopisz na końcu pliku; jeśli plik nie istnieje — stwórz go Write tool). Wpis skrócony, nie pełny raport:
+
+Szablon wpisu:
+```
+## STAN 3 — thesis-analyzer (sesja N)
+Data: [aktualna data]
+Przeanalizowany fragment: [sekcja, akapity P1–PN, pierwsze i ostatnie słowa]
+Liczba problemów: Blokujące: N | Istotne: N | Drugorzędne: N
+Problemy (skrót):
+- C2: [1 zdanie]
+- H1: [1 zdanie]
+- R3: [1 zdanie]
+- E1: [1 zdanie]
+Następny fragment: [pierwsze słowa]
+Status hipotezy: [obecna / implikowana / nieobecna]
+
+---
+```
 
 ---
 

@@ -47,7 +47,7 @@ Before beginning any mode, confirm the user has provided:
 
 1. **Quality rubric** — auto-loaded from `rubric.md` in the project folder (see Krok 0); if not found, ask the user to paste it
 2. **Research question and hypothesis** (one sentence each, or confirm none)
-3. **The text to be reviewed** — full thesis or specified section
+3. **The text to be reviewed** — full thesis `.tex` file or specified section (Claude reads the file directly from the mounted project folder using the Read tool; the user does not need to paste it)
 4. **Mode selection** — Standard / Hostile / Viva / All three / Bibliography (ask if not stated)
 5. **Submission context** (optional): prior verbal feedback from supervisor? Known weaknesses?
 6. **For Standard or Bibliography mode**: the reference list and a sample of in-text citations (at minimum the last 2 pages of bibliography + 10–15 in-text citations from the body) — needed to dispatch `bibliography-checker-wne`
@@ -58,9 +58,12 @@ If items 2–3 are missing, ask for them. Item 1 is resolved automatically — o
 
 ## Orchestration procedure
 
-### Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
+### Krok 0 — Załaduj session log, rubryk kalibracyjny i pryncypia akademickie
 
-**Przed wysłaniem agentów wykonaj dwa odczyty:**
+**Przed wysłaniem agentów wykonaj trzy odczyty:**
+
+**0. Session log (historia pracy):**
+Sprawdź czy plik `session-log.md` istnieje w folderze projektu. Jeśli tak — wczytaj go narzędziem Read. Wyciągnij: (a) wyniki poprzednich sesji thesis-analyzer i thesis-editor — jakie problemy zostały zidentyfikowane i naprawione, (b) aktualny stan pracy (opcja strukturalna, przeanalizowane sekcje). Jeśli plik nie istnieje — kontynuuj bez niego.
 
 **1. Rubryk kalibracyjny (opcjonalny plik projektu):**
 Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma:
@@ -154,6 +157,27 @@ All review findings are evaluated against three simultaneous standards, in desce
 - JEL codes and keywords in abstract (for published work — recommended for licencjat)
 
 Note: Reference papers are journal articles — ceiling, not floor. Flag deviations only when a WNE supervisor would plausibly flag them.
+
+---
+
+## Zapisz wpis STAN 5 do session-log.md
+
+Po dostarczeniu raportu recenzji dopisz wpis do `session-log.md` (Edit tool — dopisz na końcu pliku). Jeśli plik nie istnieje — stwórz go narzędziem Write.
+
+Szablon wpisu STAN 5:
+```
+## STAN 5 — thesis-reviewer (tryb: [Standard/Hostile/Viva/Comprehensive])
+Data: [aktualna data]
+Zakres recenzji: [pełna praca / sekcja X]
+Tryb: [Standard/Hostile/Viva/Comprehensive/Bibliography]
+Kluczowe problemy (skrót):
+- S1: [1 zdanie] | Waga: [BLOKUJĄCY/ISTOTNY/DRUGORZĘDNY]
+- S2: [1 zdanie] | Waga: [...]
+[...]
+Ocena gotowości do oddania: [GOTOWA / WYMAGA POPRAWEK: N problemów / NIE GOTOWA]
+
+---
+```
 
 ---
 

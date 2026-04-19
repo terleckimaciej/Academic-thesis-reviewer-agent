@@ -1,6 +1,6 @@
 ---
 name: thesis-section-writer
-description: "Run this skill when you need to write a new section from scratch — a missing section, case study, or additional chapter not yet present in the thesis. Available at any pipeline stage. Triggers on: 'napisz sekcje o', 'potrzebuje napisac case study', 'brakuje mi rozdzialu o', 'napisz wstep', 'napisz wnioski', 'write the political case study section', 'draft the methodology section'. Requires rubric from thesis-reference-calibrator. Dispatches literature-gap-finder and section-drafter-wne in sequence, optionally adds prose-polisher-wne. Always respond in the same language the user writes in."
+description: "Run this skill when you need to write a new section from scratch — a missing section, case study, or additional chapter not yet present in the thesis. Available at any pipeline stage. Triggers on: 'napisz sekcje o', 'potrzebuje napisac case study', 'brakuje mi rozdzialu o', 'napisz wstep', 'napisz wnioski', 'write the political case study section', 'draft the methodology section'. Requires rubric from thesis-reference-calibrator. Dispatches literature-gap-finder and section-drafter-wne in sequence, optionally adds prose-polisher-wne. Output is LaTeX source ready to insert into the .tex file. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
   pipeline_position: "AD-HOC — available at any pipeline stage"
@@ -10,7 +10,7 @@ metadata:
 
 ## Purpose
 
-Drafts new sections or substantial additions to a WNE UW licencjat thesis in Word document format. Specifically designed for the scenario where the thesis already exists as a rough draft with one or more missing or underdeveloped sections.
+Drafts new sections or substantial additions to a WNE UW licencjat thesis in LaTeX format. Specifically designed for the scenario where the thesis already exists as a rough draft (`.tex` file) with one or more missing or underdeveloped sections.
 
 **Architecture:** Two-stage sequential pipeline:
 1. `literature-gap-finder` — researches the intellectual landscape, identifies key sources and arguments
@@ -51,9 +51,12 @@ Before beginning, confirm the user has provided:
 
 ## Orchestration procedure
 
-### Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
+### Krok 0 — Załaduj session log, rubryk kalibracyjny i pryncypia akademickie
 
-**Przed wysłaniem agentów wykonaj dwa odczyty:**
+**Przed wysłaniem agentów wykonaj trzy odczyty:**
+
+**0. Session log (historia pracy):**
+Sprawdź czy plik `session-log.md` istnieje w folderze projektu. Jeśli tak — wczytaj go narzędziem Read. Wyciągnij: (a) opcję strukturalną (STAN 1) i listę brakujących sekcji wskazanych przez thesis-structure-decision lub thesis-macro-auditor, (b) wyniki poprzednich sesji thesis-analyzer i thesis-editor — jakie argumenty i terminy były używane, jakie problemy naprawiono. Te informacje pozwolą agentom zachować spójność z resztą pracy. Jeśli plik nie istnieje — kontynuuj bez niego.
 
 **1. Rubryk kalibracyjny (opcjonalny plik projektu):**
 Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read i zachowaj jego treść. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma:
@@ -113,7 +116,7 @@ Deploy `section-drafter-wne` with:
 - Target length
 - The academic writing principles block (categories A, B) loaded in Krok 0
 
-The drafter produces plain-text prose ready to paste into Word, with [ŹRÓDŁO POTRZEBNE] markers where citations are needed but specific sources are uncertain.
+The drafter produces LaTeX source ready to insert into the thesis `.tex` file, with [ŹRÓDŁO POTRZEBNE] markers where citations are needed but specific sources are uncertain.
 
 ### Step 4 — Optional polish pass
 
@@ -125,7 +128,7 @@ If the user requests it (or if the draft shows AI writing tells), deploy `prose-
 ### Step 5 — Deliver and annotate
 
 Present the final draft with:
-- The complete section text ready to paste into Word
+- The complete section text as LaTeX source, ready to insert into the thesis `.tex` file
 - A list of all [ŹRÓDŁO POTRZEBNE] markers with descriptions of what source is needed
 - A list of assumptions made about content
 - Suggested placement instructions (before/after what existing section)
@@ -136,7 +139,14 @@ Present the final draft with:
 
 **Language:** Polish unless instructed otherwise (matches the thesis's language).
 
-**Citations:** (Autor, rok) in-text format; no footnote-based bibliographic references; [ŹRÓDŁO POTRZEBNE: opis] for unverified sources.
+**Citations:** `(Autor, rok)` in-text format written directly in prose — not `\cite{}` commands (unless BibTeX is in use); no footnote-based bibliographic references; `[ŹRÓDŁO POTRZEBNE: opis]` for unverified sources.
+
+**LaTeX formatting:**
+- Section headings: `\section{tytuł}`, `\subsection{tytuł}`, NOT `\textbf{tytuł}` or plain bold
+- Italics for foreign terms: `\emph{democratic backsliding}`, NOT `*text*` or `_text_`
+- Footnotes: `\footnote{treść}` inline, immediately after the relevant word or sentence
+- Each new chapter should be preceded by `\newpage`
+- Output is valid LaTeX source — the user pastes it directly into the `.tex` file
 
 **Case study sections (political / comparative):**
 - Must explicitly anchor to the theoretical framework established in the preceding sections
@@ -158,6 +168,25 @@ Present the final draft with:
 - Must explicitly acknowledge limitations (non-negotiable)
 - Must mention future research directions
 - Must not introduce new empirical claims
+
+---
+
+## Zapisz wpis do session-log.md
+
+Po dostarczeniu finalnej sekcji dopisz wpis do `session-log.md` (Edit tool — dopisz na końcu pliku). Jeśli plik nie istnieje — stwórz go narzędziem Write.
+
+Szablon wpisu:
+```
+## STAN 4 — thesis-section-writer (sekcja: [tytuł])
+Data: [aktualna data]
+Napisana sekcja: [tytuł], ~[N] słów
+Umiejscowienie w pracy: po [sekcja poprzednia], przed [sekcja następna]
+Źródła wymagające weryfikacji: [N] znaczników [ŹRÓDŁO POTRZEBNE]
+Kluczowe argumenty w sekcji: [1–2 zdania podsumowania]
+Status: Draft dostarczony / Polish pass wykonany / Wstawiony do pliku .tex
+
+---
+```
 
 ---
 

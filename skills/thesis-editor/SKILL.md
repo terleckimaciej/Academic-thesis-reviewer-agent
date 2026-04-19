@@ -1,6 +1,6 @@
 ---
 name: thesis-editor
-description: "Run this skill when you have a diagnosed list of problems and are ready to implement specific changes. This is the ONLY skill that modifies text. Triggers on: 'popraw to', 'wprowadz te zmiany', 'zrob korekte', 'zaaplikuj sugestie #N', 'edytuj ten fragment', 'skroc ten akapit'. Never triggers without a prior diagnosis list from thesis-analyzer, thesis-macro-auditor, or thesis-reviewer. Works on maximum 800-1000 words per session. Produces a change-log for every edit. Can dispatch prose-polisher-wne for a final polish pass. Always respond in the same language the user writes in."
+description: "Run this skill when you have a diagnosed list of problems and are ready to implement specific changes. This is the ONLY skill that modifies text. Triggers on: 'popraw to', 'wprowadz te zmiany', 'zrob korekte', 'zaaplikuj sugestie #N', 'edytuj ten fragment', 'skroc ten akapit'. Never triggers without a prior diagnosis list from thesis-analyzer, thesis-macro-auditor, or thesis-reviewer. Works on maximum 800-1000 words per session. Input and output are LaTeX source (.tex). Produces a change-log for every edit. Can dispatch prose-polisher-wne for a final polish pass. Always respond in the same language the user writes in."
 metadata:
   version: "1.0"
   pipeline_position: "STAN 4 — after thesis-analyzer or thesis-macro-auditor; before thesis-reviewer"
@@ -47,7 +47,7 @@ The changed text should sound like a better version of the same author, not a di
 
 Confirm receipt of:
 1. **The diagnosis list** — numbered findings from a prior skill, with locations
-2. **The text fragment** — max 1000 words, pasted as plain text (not as a PDF)
+2. **The text fragment or file path** — either: (a) max 1000 words pasted as LaTeX source, or (b) the path to the `.tex` file in the mounted project folder — Claude will read the relevant section using the Read tool
 3. **Which findings to address** — "all of them", "findings #2, #4, #7", or "start with the most critical"
 
 If items 1 or 2 are missing, request them before proceeding.
@@ -56,14 +56,18 @@ Confirm the plan before executing:
 ```
 ✓ Lista diagnostyczna: [N] problemów do adresowania
 ✓ Fragment: ~[N] słów, [sekcja]
+✓ Plik .tex: [ścieżka do pliku — jeśli zamontowany] / [fragment wklejony przez użytkownika]
 ✓ Zaczynam od: [opis pierwszej zmiany]
 ```
 
 ---
 
-## Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
+## Krok 0 — Załaduj session log, rubryk kalibracyjny i pryncypia akademickie
 
-**Na początku każdej sesji edycji wykonaj dwa odczyty:**
+**Na początku każdej sesji edycji wykonaj trzy odczyty:**
+
+**0. Session log:**
+Sprawdź czy plik `session-log.md` istnieje w folderze projektu. Jeśli tak — wczytaj go. Zapoznaj się z historią sesji analizy i poprzednich edycji. Jeśli plik nie istnieje — kontynuuj bez niego.
 
 **1. Rubryk kalibracyjny (opcjonalny plik projektu):**
 Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read i zachowaj jego treść — przekaż ją agentowi `prose-polisher-wne` jeśli zostanie uruchomiony. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma — kontynuuj bez rubryki (thesis-editor może działać bez niej, opierając się na liście diagnoz).
@@ -140,7 +144,7 @@ Findings with the `M` prefix from `thesis-macro-auditor` often concern the thesi
 **M-findings that require content removal or restructuring across section boundaries** (e.g. "move paragraph from Methodology to Results"):
 - Do not execute the move — flag as WYMAGA DECYZJI AUTORA
 - State exactly: what to move, from where, to where, and why
-- The author implements the move in Word; this skill does not have access to the full thesis
+- The author implements the move in the `.tex` file; this skill does not have access to the full thesis
 
 **M-findings that are local to the pasted fragment** (e.g. "your introduction lacks a gap statement"):
 - Treat as Type C or D and handle normally
@@ -170,6 +174,20 @@ Present the polisher's output as the final version.
 
 ---
 
+## LaTeX editing rules
+
+When editing LaTeX source:
+- **Preserve all LaTeX commands** — do not accidentally strip `\footnote{}`, `\emph{}`, `\section{}`, or figure environments when editing prose within them
+- **Footnotes are inline** — `\footnote{treść}` immediately after the word or sentence it annotates; do not move them
+- **Do not change heading commands** — `\section{}` stays `\section{}`, not `\textbf{}`
+- **For Type B sentence-level edits** — edit only the prose text inside LaTeX commands, not the commands themselves
+- **For Type D structural changes** (moving paragraphs) — show the LaTeX source block to move, with exact `WSTAW PO [fragment]` instruction; the author makes the move in the `.tex` file
+- **Output format** — always produce the edited fragment as valid LaTeX, not plain text. The user will paste it directly into their `.tex` file.
+- **Italics for foreign terms** — use `\emph{term}` not asterisks or underscores
+- **En-dashes in prose** — use `--` in LaTeX, not `-` or `—`
+
+---
+
 ## Editing standards calibrated to WNE reference papers (Fałkowski & Lewkowicz)
 
 **Claim strength:** Calibrate language to evidence. Correlational evidence → correlational language ("consistent with", "suggests", "our results are in line with"). Never upgrade language beyond its evidential warrant.
@@ -190,7 +208,7 @@ Present the polisher's output as the final version.
 ═══════════════════════════════════════════════
 ZMIENIONY TEKST
 ═══════════════════════════════════════════════
-[Pełny zmieniony fragment — gotowy do skopiowania do dokumentu Word]
+[Pełny zmieniony fragment jako LaTeX — gotowy do zapisania do pliku .tex]
 
 ═══════════════════════════════════════════════
 CHANGE-LOG
@@ -216,6 +234,67 @@ PROBLEMY NIEADRESOWANE W TEJ SESJI:
 
 NASTĘPNY FRAGMENT: [pierwsze słowa kolejnego fragmentu, jeśli dotyczy]
 ═══════════════════════════════════════════════
+```
+
+Po wyświetleniu powyższego outputu — przejdź do sekcji **Zapisywanie zmian do pliku**.
+
+---
+
+## Zapisywanie zmian do pliku .tex
+
+Po wygenerowaniu change-logu i zmienionego tekstu, Claude pyta o zatwierdzenie i — jeśli użytkownik zatwierdzi — zapisuje zmiany bezpośrednio do pliku `.tex`.
+
+### Procedura zatwierdzenia i zapisu
+
+**Krok 1 — Wyświetl output** (zmieniony tekst + change-log, jak powyżej).
+
+**Krok 2 — Zapytaj o zatwierdzenie:**
+> "Czy zaakceptować te zmiany i zapisać je bezpośrednio do pliku `[ścieżka do pliku .tex]`? Wpisz 'tak' żeby zapisać, lub wskaż które zmiany pominąć."
+
+Jeśli użytkownik nie udostępnił folderu projektu (plik .tex nie jest zamontowany), pomiń krok 3 i poinformuj:
+> "Plik `.tex` nie jest zamontowany — skopiuj powyższy zmieniony fragment i wklej go ręcznie do swojego pliku."
+
+**Krok 3 — Po otrzymaniu jednoznacznego zatwierdzenia ('tak', 'zapisz', 'akceptuję'):**
+
+Dla każdej zatwierdzonej zmiany użyj narzędzia **Edit** z parametrami `old_string` i `new_string`, aby wprowadzić zmianę bezpośrednio w pliku `.tex`:
+- `old_string` = dokładny oryginalny fragment LaTeX (PRZED z change-logu)
+- `new_string` = zmieniony fragment LaTeX (PO z change-logu)
+- Używaj wystarczająco długich `old_string` żeby były jednoznaczne w pliku (co najmniej pełne zdanie wraz z otaczającymi komendami LaTeX)
+- Zapisuj zmiany po kolei — jedną na raz (Edit tool per zmiana)
+
+Po każdej zmianie potwierdź:
+> "✓ Zmiana #[N] ([prefiks]) zapisana do pliku."
+
+**Krok 4 — Po zapisaniu wszystkich zatwierdzonych zmian:**
+> "Wszystkie [N] zatwierdzonych zmian zostały zapisane do `[ścieżka]`. Zmiany oczekujące na decyzję autora: [lista prefixów]."
+
+### Zasady bezpieczeństwa zapisu
+
+- **Nigdy nie zapisuj bez jednoznacznego zatwierdzenia** — "ok", "chyba tak", "może" to NIE jest zatwierdzenie. Zapytaj ponownie.
+- **Zmiany Type C i D wymagają osobnego potwierdzenia** dla każdej — nie łącz ich w jedno pytanie.
+- **Przy ambiguity w old_string** (fragment pojawia się więcej niż raz w pliku): zacznij od krótkiego fragmentu, a jeśli Edit tool zgłosi błąd nieunikalności — rozszerz `old_string` o więcej kontekstu.
+- **Fallback**: jeśli Edit tool nie może zlokalizować `old_string` (tekst mógł być wcześniej zmieniony): poinformuj użytkownika i poproś o wskazanie lokalizacji ręcznie.
+
+---
+
+## Zapisz wpis STAN 4 do session-log.md
+
+Po zakończeniu sesji edycji (po zapisaniu zmian lub po dostarczeniu zmienionego tekstu, jeśli plik nie jest zamontowany) — dopisz wpis do `session-log.md`.
+
+Użyj narzędzia **Edit** (dopisz na końcu pliku). Jeśli plik nie istnieje — stwórz go narzędziem Write.
+
+Szablon wpisu STAN 4:
+```
+## STAN 4 — thesis-editor (sesja N)
+Data: [aktualna data]
+Edytowany fragment: [sekcja, pierwsze i ostatnie słowa]
+Liczba zmian: [N zatwierdzonych] z [N łącznie]
+Zmiany zaakceptowane: [C2, E1, R3 — zapisane do pliku / dostarczone do wklejenia]
+Oczekujące na decyzję autora: [H3, M2 — krótki opis każdej]
+Problemy nieadresowane: [lista z powodem]
+Następny fragment: [pierwsze słowa kolejnego fragmentu lub "koniec sekcji"]
+
+---
 ```
 
 ---

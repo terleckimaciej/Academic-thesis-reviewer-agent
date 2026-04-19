@@ -25,14 +25,20 @@ Check for violations of WNE UW formatting requirements. Each violation is a sepa
 
 - Missing or incorrectly formatted abstract page (must include Erasmus codes, subject classification, keywords, bilingual abstract)
 - Full bibliographic references in footnotes (forbidden — footnotes for complementary content only, no bib entries)
-- Unnumbered or unsourced tables and figures
+- Unnumbered or unsourced tables and figures (in LaTeX: check that every `\begin{figure}` has a `\caption{}`)
 - Bibliography entries numbered (forbidden) — bibliography must be alphabetical, APA format, not numbered
-- Foreign terms not in italics
-- Main chapter headings not starting on new pages
+- Foreign terms not in italics (in LaTeX: should use `\emph{}` or `\textit{}`)
+- Main chapter headings not starting on new pages (in LaTeX: should use `\newpage` before each `\section{}`)
 - Citation format inconsistencies (mixing styles within the thesis)
 - Missing declarations page
-- Times New Roman 12pt, 1.5 line spacing, 25mm margins — note if clearly violated
-- In-text citations in (Author, Year) format — not footnote-based for bibliographic references
+- Times New Roman 12pt, 1.5 line spacing, 25mm margins — the thesis preamble should include `mathptmx`, `setspace`/`\onehalfspacing`, and `geometry` package with correct margins. Note if clearly violated.
+- In-text citations in (Author, Year) format written directly in the prose — not footnote-based for bibliographic references, not `\cite{}` commands (unless BibTeX is used consistently throughout)
+
+**LaTeX-specific formal checks:**
+- Heading structure: chapter-level sections should use `\section{}`, subsections `\subsection{}`, not manual `\textbf{}` bolding
+- Footnotes: correctly placed as `\footnote{...}` inline — not as endnotes or in a separate section
+- Images: `\includegraphics` inside a `figure` environment with `\caption{}` and `[H]` float specifier
+- Polish characters: should render correctly (UTF-8 + T1 fontenc + inputenc setup)
 
 ### Part B — Content and argumentation
 

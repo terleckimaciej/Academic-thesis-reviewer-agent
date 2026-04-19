@@ -115,9 +115,9 @@ Wróć do `thesis-macro-auditor` gdy:
 | `thesis-reference-calibrator` | Materiały referencyjne od użytkownika |
 | `thesis-structure-decision` | Rubryka (STAN 0) |
 | `thesis-macro-auditor` | Rubryka + opcja struktury |
-| `thesis-analyzer` | Rubryka + raport makro-audytu + fragment tekstu |
-| `thesis-editor` | Lista problemów z dowolnego skilla diagnostycznego |
-| `thesis-reviewer` | Rubryka + tekst (sekcja lub całość) |
+| `thesis-analyzer` | Rubryka + raport makro-audytu + fragment tekstu (LaTeX source lub odczyt pliku przez Read) |
+| `thesis-editor` | Lista problemów z dowolnego skilla diagnostycznego + fragment LaTeX source |
+| `thesis-reviewer` | Rubryka + plik `.tex` (Claude czyta go bezpośrednio z zamontowanego folderu) |
 | `thesis-section-writer` | Rubryka + opis potrzebnej sekcji |
 
 ---
@@ -130,6 +130,76 @@ Based on the user's answers to the state questions, provide:
 2. **Rekomendowany następny krok** — który skill wywołać i z czym
 3. **Alternatywne opcje** — czy warto wrócić do makro-audytu, czy kontynuować mikro
 4. **Ostrzeżenia o brakujących zależnościach** — np. "nie masz jeszcze rubryki (brak pliku `rubric.md` w folderze projektu) — bez niej thesis-analyzer będzie oceniał względem generycznego standardu, nie Twojego wydziału"
+
+**Format pracy:** Plugin jest przygotowany do pracy z tezą w formacie **LaTeX** (plik `.tex`). Claude może bezpośrednio czytać i edytować plik `.tex` za pomocą narzędzi Read i Edit, jeśli folder projektu jest zamontowany. Jeśli praca jest nadal w formacie `.docx`, sekcje do analizy należy wkleić jako plain text — ale wyniki edycji będą zwracane jako LaTeX i wymagają ręcznej integracji z dokumentem Word.
+
+---
+
+## Session Log — plik historii sesji
+
+Plugin zapisuje historię pracy w pliku `session-log.md` w folderze projektu. Jest to odpowiednik roboczego dziennika — pozwala zachować ciągłość między sesjami bez konieczności ręcznego przekazywania kontekstu.
+
+**Format pliku session-log.md:**
+```
+# SESSION LOG — [Tytuł pracy]
+
+## Jak używać tego pliku
+Na początku każdej sesji pracy nad licencjatem: wczytaj ten plik razem z rubric.md.
+Zawiera historię ustaleń ze wszystkich poprzednich etapów pipeline'u.
+
+---
+
+## STAN 0 — thesis-reference-calibrator ✅
+Data: [data]
+Wynik: Rubryka kalibracyjna zapisana w `rubric.md`
+Kluczowe ustalenia:
+- [punkt 1]
+- [punkt 2]
+
+---
+
+## STAN 1 — thesis-structure-decision ✅
+Data: [data]
+Rekomendacja: Opcja [A/B/C/D] — [krótki opis]
+Uzasadnienie: [1–2 zdania]
+Brakujące elementy (do uzupełnienia):
+1. [element]
+2. [element]
+
+---
+
+## STAN 2 — thesis-macro-auditor ✅
+Data: [data]
+Sekcje z problemami: [lista]
+Kluczowe problemy makro:
+- M1: [opis]
+- M2: [opis]
+
+---
+
+## STAN 3 — thesis-analyzer (sesja N)
+Data: [data]
+Przeanalizowany fragment: [sekcja, akapity P1–PN]
+Problemy:
+- C2: [opis]
+- H1: [opis]
+Następny fragment: [pierwsze słowa]
+
+---
+
+## STAN 4 — thesis-editor (sesja N)
+Data: [data]
+Edytowany fragment: [sekcja]
+Zmiany: Zmiana #1 (C2), Zmiana #2 (E1) — zaakceptowane
+Oczekujące: H3 — wymaga decyzji autora
+
+---
+```
+
+**Zasady obsługi pliku przez Claude:**
+1. **Załaduj** na początku każdej sesji: użyj Read tool, jeśli folder projektu jest zamontowany. Jeśli plik nie istnieje — stwórz go (Write tool) po pierwszej zakończonej sesji. Jeśli folder nie jest zamontowany — zapytaj użytkownika czy chce wkleić log ręcznie.
+2. **Zapisz** po zakończeniu każdej sesji: użyj Edit tool (dopisz nową sekcję na końcu) lub Write tool (jeśli tworzysz po raz pierwszy). Nie nadpisuj poprzednich wpisów.
+3. **Uwaga:** Każdy skill ma sekcję "Krok 0" która ładuje rubric.md i session-log.md. Jeśli oba pliki są dostępne, ładuj oba. Rubric.md to standard jakości — session-log.md to historia pracy.
 
 Nie wykonuj żadnej analizy, edycji ani recenzji. Wskaż tylko właściwy skill i co do niego dostarczyć.
 

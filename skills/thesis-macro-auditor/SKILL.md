@@ -52,8 +52,8 @@ Calibration note: The reference papers are published journal articles — they r
 Before beginning, confirm the user has provided:
 
 1. **Quality rubric** — auto-loaded from `rubric.md` in the project folder (see Krok 0); if not found, ask the user to paste it
-2. **Full table of contents** with all section and subsection headings
-3. **First and last sentence** of each section and subsection
+2. **Full table of contents** with all section and subsection headings (if the thesis is a `.tex` file in the mounted folder, Claude can extract this by reading the file with the Read tool and scanning for `\section{}` / `\subsection{}` commands)
+3. **First and last sentence** of each section and subsection (Claude can read these directly from the `.tex` file if mounted)
 4. **Brief statement** of the thesis's central research question/objective and hypothesis
 5. **Structural decision** from `thesis-structure-decision` (Option A, B, C, or D)
 
@@ -63,9 +63,12 @@ If items 2–4 are missing, ask for them. Do not proceed without them. Item 1 is
 
 ## Orchestration procedure
 
-### Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
+### Krok 0 — Załaduj rubryk kalibracyjny, session log i pryncypia akademickie
 
-**Przed wysłaniem agentów wykonaj dwa odczyty:**
+**Przed wysłaniem agentów wykonaj trzy odczyty:**
+
+**0. Session log (historia pracy):**
+Sprawdź czy plik `session-log.md` istnieje w folderze projektu użytkownika. Jeśli tak — wczytaj go narzędziem Read. Skorzystaj z niego by zrozumieć aktualny stan pracy (opcja strukturalna z STAN 1, wcześniejsze wyniki audytów). Jeśli nie ma pliku — kontynuuj bez niego (pierwsza sesja).
 
 **1. Rubryk kalibracyjny (opcjonalny plik projektu):**
 Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma:
@@ -184,6 +187,24 @@ NASTĘPNY KROK:
 [Jeśli praca nie ma BLOKUJĄCYCH i wszystkie sekcje przeanalizowane:]
 → thesis-reviewer (recenzja końcowa)
 ═══════════════════════════════════════════════
+```
+
+### Zapisz wpis STAN 2 do session-log.md
+
+Po dostarczeniu raportu dopisz wpis do `session-log.md` (Edit tool — dopisz na końcu). Jeśli plik nie istnieje — stwórz go (Write tool).
+
+Szablon wpisu:
+```
+## STAN 2 — thesis-macro-auditor ✅
+Data: [aktualna data]
+Sekcje z problemami: [lista sekcji z M-findings BLOKUJĄCE]
+Kluczowe problemy makro:
+- M1: [opis 1 zdanie]
+- M2: [opis 1 zdanie]
+[...]
+Następny krok: thesis-analyzer (fragment: [pierwsze słowa pierwszego fragmentu])
+
+---
 ```
 
 ---
