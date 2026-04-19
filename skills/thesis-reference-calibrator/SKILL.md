@@ -158,11 +158,21 @@ dispatching those agents.
 
 ## After generating the rubric
 
-Tell the user explicitly:
-> "Please save this rubric — copy it somewhere you can retrieve it. At the start of every subsequent session with any other thesis skill, paste this rubric as the first thing in the conversation, before any text from your thesis."
+### Zapisz rubrykę do pliku projektu
 
-Then ask:
-> "Do any of these standards surprise you, or contradict what your supervisor has told you? If so, let's resolve the conflict before we proceed."
+Po wygenerowaniu rubryki użyj narzędzia **Write**, aby zapisać jej pełną treść do pliku `rubric.md` w folderze projektu użytkownika:
+
+1. Jeśli użytkownik ma zamontowany folder projektu (wybrał folder podczas startu sesji w Cowork) — zapisz tam: `[folder_projektu]/rubric.md`.
+2. Jeśli folder nie jest zamontowany — zapisz do folderu wyjściowego (`outputs/rubric.md`) i poinformuj użytkownika, gdzie plik się znajduje, i żeby umieścił go w folderze swojej pracy licencjackiej.
+
+Po pomyślnym zapisie poinformuj użytkownika:
+> "Rubryka została zapisana jako `rubric.md` w Twoim folderze projektu. Wszystkie inne skille tego pluginu będą ją automatycznie wczytywać — nie musisz jej już wklejać przy każdej sesji. Jeśli uruchomisz `thesis-reference-calibrator` ponownie, plik zostanie nadpisany nową wersją."
+
+Jeśli zapis nie powiedzie się, wróć do instrukcji ręcznej:
+> "Nie udało się automatycznie zapisać pliku. Skopiuj rubrykę i zachowaj ją — wklejaj ją na początku każdej sesji z innym skillem."
+
+Następnie zapytaj:
+> "Czy któryś z tych standardów Cię zaskakuje, albo stoi w sprzeczności z tym, co mówił Ci promotor? Jeśli tak — rozwiążmy konflikt zanim przejdziemy dalej."
 
 ---
 

@@ -45,22 +45,31 @@ Audits the bibliography and in-text citations only. Dispatches `bibliography-che
 
 Before beginning any mode, confirm the user has provided:
 
-1. **Quality rubric** from `thesis-reference-calibrator` (paste at session start)
+1. **Quality rubric** — auto-loaded from `rubric.md` in the project folder (see Krok 0); if not found, ask the user to paste it
 2. **Research question and hypothesis** (one sentence each, or confirm none)
 3. **The text to be reviewed** — full thesis or specified section
 4. **Mode selection** — Standard / Hostile / Viva / All three / Bibliography (ask if not stated)
 5. **Submission context** (optional): prior verbal feedback from supervisor? Known weaknesses?
 6. **For Standard or Bibliography mode**: the reference list and a sample of in-text citations (at minimum the last 2 pages of bibliography + 10–15 in-text citations from the body) — needed to dispatch `bibliography-checker-wne`
 
-If items 1–3 are missing, ask for them. Item 6 is required for bibliography audit; if not provided in Standard mode, note that bibliography audit will be skipped and offer to run it separately.
+If items 2–3 are missing, ask for them. Item 1 is resolved automatically — only ask the user for it if the file cannot be found. Item 6 is required for bibliography audit; if not provided in Standard mode, note that bibliography audit will be skipped and offer to run it separately.
 
 ---
 
 ## Orchestration procedure
 
-### Krok 0 — Załaduj pryncypia akademickie
+### Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
 
-**Przed wysłaniem agentów:** Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następujących kategorii:
+**Przed wysłaniem agentów wykonaj dwa odczyty:**
+
+**1. Rubryk kalibracyjny (opcjonalny plik projektu):**
+Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma:
+- Zapytaj użytkownika: "Nie znalazłem pliku `rubric.md`. Czy możesz wkleić rubrykę kalibracyjną z `thesis-reference-calibrator`? Jeśli jej nie masz, przeprowadzę recenzję względem standardu WNE UW i artykułów referencyjnych."
+- Jeśli użytkownik wklei rubrykę — kontynuuj z nią.
+- Jeśli użytkownik potwierdzi brak rubryki — kontynuuj bez niej, zaznacz w raporcie: "UWAGA: Recenzja bez rubryki wydziałowej."
+
+**2. Pryncypia akademickie:**
+Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następujących kategorii:
 - **Kategoria A** (Structure & Narrative) — pryncypia A1–A7
 - **Kategoria B** (Prose & Style) — pryncypia B1–B8
 - **Kategoria E** (Citations & Bibliography) — pryncypia E1–E3

@@ -41,7 +41,7 @@ Audited against:
    - Discussion/Conclusion: synthesises findings, acknowledges limitations, opens future research
    - Every section transition explicitly signalled
 
-3. **The calibration rubric** from `thesis-reference-calibrator` (must be provided at session start).
+3. **The calibration rubric** from `thesis-reference-calibrator` — auto-loaded from `rubric.md` in the project folder (see Krok 0).
 
 Calibration note: The reference papers are published journal articles — they represent a ceiling above licencjat requirements. Audit assesses whether the thesis meets the licencjat standard, not whether it matches a journal article.
 
@@ -51,21 +51,30 @@ Calibration note: The reference papers are published journal articles — they r
 
 Before beginning, confirm the user has provided:
 
-1. **Quality rubric** from `thesis-reference-calibrator`
+1. **Quality rubric** — auto-loaded from `rubric.md` in the project folder (see Krok 0); if not found, ask the user to paste it
 2. **Full table of contents** with all section and subsection headings
 3. **First and last sentence** of each section and subsection
 4. **Brief statement** of the thesis's central research question/objective and hypothesis
 5. **Structural decision** from `thesis-structure-decision` (Option A, B, C, or D)
 
-If items 2–4 are missing, ask for them. Do not proceed without them.
+If items 2–4 are missing, ask for them. Do not proceed without them. Item 1 is resolved automatically — only ask the user for it if the file cannot be found.
 
 ---
 
 ## Orchestration procedure
 
-### Krok 0 — Załaduj pryncypia akademickie
+### Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
 
-**Przed wysłaniem agentów:** Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następującej kategorii:
+**Przed wysłaniem agentów wykonaj dwa odczyty:**
+
+**1. Rubryk kalibracyjny (opcjonalny plik projektu):**
+Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma:
+- Zapytaj użytkownika: "Nie znalazłem pliku `rubric.md`. Czy możesz wkleić rubrykę kalibracyjną z `thesis-reference-calibrator`? Jeśli jej nie masz, mogę przeprowadzić audyt względem ogólnego standardu WNE."
+- Jeśli użytkownik wklei rubrykę — kontynuuj z nią.
+- Jeśli użytkownik potwierdzi brak rubryki — kontynuuj bez niej, ale zaznacz w raporcie: "UWAGA: Audyt bez rubryki wydziałowej — ocena względem ogólnego standardu WNE."
+
+**2. Pryncypia akademickie:**
+Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następującej kategorii:
 - **Kategoria A** (Structure & Narrative) — pryncypia A1–A7
 
 Dołącz pełną treść tej kategorii do promptu każdego z sześciu agentów strukturalnych jako sekcję:

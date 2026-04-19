@@ -33,7 +33,7 @@ Always respond in the same language the user writes in.
 
 Before beginning, verify you have:
 
-1. **Rubric from `thesis-reference-calibrator`** — do not proceed without it.
+1. **Rubric from `thesis-reference-calibrator`** — try to auto-load from `rubric.md` in the project folder (use the Read tool). If not found, ask the user to paste it. If user confirms they don't have one, ask them to run `thesis-reference-calibrator` first — a structural recommendation without calibration may not match the examiner's expectations.
 2. **Structural overview of the thesis:**
    - Table of contents (with section titles and approximate page counts)
    - Abstract or introduction of each major part
@@ -158,4 +158,4 @@ Wait for confirmation before the user moves to `thesis-macro-auditor`.
 - **User unsure about hypotheses**: Ask them to state in one sentence what each part is trying to answer.
 - **Supervisor has already expressed a preference**: Treat as hard constraint; flag if the preferred structure creates logical problems.
 - **Severe time constraint**: Weight recommendation toward option requiring least additional writing — typically Option A or C.
-- **Rubric missing**: Do not produce a recommendation. Ask user to run `thesis-reference-calibrator` first.
+- **Rubric missing**: Try to load from `rubric.md` first. If not found and user doesn't have one, ask them to run `thesis-reference-calibrator` before proceeding — the recommendation depends on the field-specific quality standard.

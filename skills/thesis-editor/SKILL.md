@@ -61,9 +61,15 @@ Confirm the plan before executing:
 
 ---
 
-## Krok 0 — Załaduj pryncypia akademickie
+## Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
 
-**Na początku każdej sesji edycji:** Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następujących kategorii:
+**Na początku każdej sesji edycji wykonaj dwa odczyty:**
+
+**1. Rubryk kalibracyjny (opcjonalny plik projektu):**
+Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read i zachowaj jego treść — przekaż ją agentowi `prose-polisher-wne` jeśli zostanie uruchomiony. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma — kontynuuj bez rubryki (thesis-editor może działać bez niej, opierając się na liście diagnoz).
+
+**2. Pryncypia akademickie:**
+Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następujących kategorii:
 - **Kategoria B** (Prose & Style) — pryncypia B1–B8
 - **Kategoria F** (Process & Meta) — pryncypia F1–F2
 
@@ -158,7 +164,7 @@ Co jest potrzebne: [konkretnie — nowe zdanie/akapit/źródło/decyzja]
 After addressing all structural and logical findings, the user may request a final polish pass. When they do, dispatch `prose-polisher-wne` with:
 - The edited fragment
 - A brief note of what was already changed (so the polisher does not re-fix things)
-- The rubric
+- The rubric (loaded in Krok 0 from `rubric.md`, or omit if not available)
 
 Present the polisher's output as the final version.
 

@@ -28,12 +28,12 @@ Do not accept more than approximately 1000 words of thesis text for analysis in 
 
 **Rule 2 — Session briefing is mandatory.**
 Every session must begin with the user providing, in this order:
-1. The quality rubric from `thesis-reference-calibrator`
+1. The quality rubric (loaded automatically from file — see Krok 0 below; if not found, ask the user to paste it)
 2. The research question / hypothesis (one sentence)
 3. The section being analysed and its function in the thesis
 4. A summary of issues already identified in previous sessions (or "no previous sessions")
 
-Ask for items 1–3 if missing. Item 4 is recommended but not blocking.
+Ask for items 2–3 if missing. Item 4 is recommended but not blocking. Item 1 is resolved automatically — only ask the user for it if the file cannot be found.
 
 **Rule 3 — Produce a handoff summary at the end of every session.**
 The last output of every session must be a structured handoff block for the user to copy and paste at the start of the next session. Without this, continuity is lost.
@@ -48,7 +48,7 @@ If Claude finds itself drafting a better version of a sentence, stop, note the i
 Confirm receipt of all mandatory inputs before beginning:
 
 ```
-✓ Rubric received
+✓ Rubric: [loaded from file / provided by user / not available — using generic standard]
 ✓ Research question / hypothesis: [restate in one sentence]
 ✓ Section being analysed: [section name + function]
 ✓ Previous issues: [brief summary or "none"]
@@ -61,9 +61,18 @@ Beginning analysis of: [first few words of fragment]...
 
 ## Orchestration procedure
 
-### Krok 0 — Załaduj pryncypia akademickie
+### Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
 
-**Przed wysłaniem agentów:** Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następujących kategorii:
+**Przed wysłaniem agentów wykonaj dwa odczyty:**
+
+**1. Rubryk kalibracyjny (opcjonalny plik projektu):**
+Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma:
+- Zapytaj użytkownika: "Nie znalazłem pliku `rubric.md`. Czy możesz wkleić rubrykę kalibracyjną z `thesis-reference-calibrator`? Jeśli jej nie masz, mogę przeprowadzić analizę względem ogólnego standardu akademickiego."
+- Jeśli użytkownik wklei rubrykę — kontynuuj z nią.
+- Jeśli użytkownik potwierdzi brak rubryki — kontynuuj bez niej, ale zaznacz w raporcie: "UWAGA: Analiza bez rubryki wydziałowej — ocena względem ogólnego standardu akademickiego."
+
+**2. Pryncypia akademickie:**
+Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następujących kategorii:
 - **Kategoria A** (Structure & Narrative) — pryncypia A1–A7
 - **Kategoria B** (Prose & Style) — pryncypia B1–B8
 - **Kategoria F** (Process & Meta) — pryncypia F1–F2
@@ -189,7 +198,7 @@ A 50-page thesis requires approximately 25–30 analysis sessions at the 800–1
 
 **At the start of each session:**
 - User pastes the handoff block from the previous session
-- User pastes the rubric (or confirms unchanged)
+- Claude auto-loads the rubric from `rubric.md` (user confirms unchanged or provides updates if the rubric was revised)
 - User states the research question (or confirms unchanged)
 - Claude reads the handoff block and confirms continuity before beginning
 

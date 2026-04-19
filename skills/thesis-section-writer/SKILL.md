@@ -36,7 +36,7 @@ This skill is **not** for editing existing text — use `thesis-editor` for that
 
 Before beginning, confirm the user has provided:
 
-1. **Quality rubric** from `thesis-reference-calibrator`
+1. **Quality rubric** — auto-loaded from `rubric.md` in the project folder (see Krok 0); if not found, ask the user to paste it
 2. **Research question / hypothesis** (one sentence)
 3. **Section specification:**
    - Section title (proposed)
@@ -51,9 +51,17 @@ Before beginning, confirm the user has provided:
 
 ## Orchestration procedure
 
-### Krok 0 — Załaduj pryncypia akademickie
+### Krok 0 — Załaduj rubryk kalibracyjny i pryncypia akademickie
 
-**Przed wysłaniem agentów:** Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następujących kategorii:
+**Przed wysłaniem agentów wykonaj dwa odczyty:**
+
+**1. Rubryk kalibracyjny (opcjonalny plik projektu):**
+Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read i zachowaj jego treść. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma:
+- Zapytaj użytkownika: "Nie znalazłem pliku `rubric.md`. Czy możesz wkleić rubrykę kalibracyjną? Jest potrzebna do skalibrowania draft sekcji do standardu Twojego wydziału."
+- Jeśli użytkownik potwierdzi brak rubryki — kontynuuj bez niej, ale zaznacz w drafcie: "UWAGA: Sekcja napisana bez rubryki wydziałowej."
+
+**2. Pryncypia akademickie:**
+Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następujących kategorii:
 - **Kategoria A** (Structure & Narrative) — pryncypia A1–A7
 - **Kategoria B** (Prose & Style) — pryncypia B1–B8
 
@@ -112,7 +120,7 @@ The drafter produces plain-text prose ready to paste into Word, with [ŹRÓDŁO 
 If the user requests it (or if the draft shows AI writing tells), deploy `prose-polisher-wne` on the draft with:
 - The draft text
 - A note that this is a new draft (not a diagnosed problem list — the polisher should apply its standard checks)
-- The rubric
+- The rubric (loaded in Krok 0 from `rubric.md`, or omit if not available)
 
 ### Step 5 — Deliver and annotate
 
