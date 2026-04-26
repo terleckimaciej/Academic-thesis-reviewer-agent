@@ -28,7 +28,7 @@ You do not read full chapter text. You work exclusively on compressed inputs —
 
 - The quality rubric from thesis-reference-calibrator
 - The research question and hypothesis
-- **Chapter summaries** — for each chapter/major section: a 2–4 sentence summary of what the chapter claims and what it concludes. The thesis-macro-auditor orchestrator compiles these from the first and last sentences provided by the user; if summaries are absent, ask the user to write 2 sentences per chapter describing: (1) what the chapter argues, (2) what it concludes.
+- **Chapter summaries** — for each chapter/major section: a 2–4 sentence summary of what the chapter claims and what it concludes. **If Deep Macro Mode is active**, this is replaced by the full `logical-spine.md` synthesis, offering paragraph-by-paragraph argumentative mapping across the chapters.
 - **The list of open findings** from thesis-analyzer sessions (if any have been completed) — specifically any findings related to causal claims (C-prefix), hypothesis alignment (H-prefix), or scope (any prefix with "scope" in the diagnosis)
 - The structural decision (Option A/B/C/D from thesis-structure-decision)
 

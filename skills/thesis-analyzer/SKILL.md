@@ -140,13 +140,16 @@ Collect all four agent outputs. Then:
 2. **Sort** within each severity tier: C first (highest credibility risk), then H, then R, then E.
 3. **Merge duplicates** if two agents flagged the same sentence from different angles — create one entry that lists both labels (e.g., `C2 / R1`) and both diagnoses.
 
-### Step 4 — Produce handoff block and save to session log
+### Step 4 — Produce handoff block, micro-synthesis, and save to session log/logical spine
 
-Always produce the handoff block, even if the session is short or the user does not ask for it.
+Always produce the handoff block, even if the session is short or the user does not ask for it. 
+Dodatkowo, dla każdego akapitu wygeneruj "Micro-Synthesis" — jedno, bardzo obszerne zdanie podsumowujące, jaki dokładnie argument / mechanizm został przedstawiony, jakie dowody lub literaturę przywołano i jak ma się to do głównej hipotezy. Będzie to kluczowe dla późniejszego audytu makro.
 
-**Po dostarczeniu raportu i bloku handoff — dopisz wpis do `session-log.md`** (Edit tool — dopisz na końcu pliku; jeśli plik nie istnieje — stwórz go Write tool). Wpis skrócony, nie pełny raport:
+**Po dostarczeniu raportu:**
+1. **Dopisz wpis do `session-log.md`** (Edit tool — dopisz na końcu pliku; jeśli plik nie istnieje — stwórz go Write tool). Wpis skrócony, nie pełny raport.
+2. **Dopisz Micro-Synthesis do `logical-spine.md`** w folderze projektu (Edit tool — dopisz na końcu pod nagłówkiem danej sekcji; jeśli plik nie istnieje — stwórz go).
 
-Szablon wpisu:
+Szablon wpisu `session-log.md`:
 ```
 ## STAN 3 — thesis-analyzer (sesja N)
 Data: [aktualna data]
@@ -161,6 +164,13 @@ Następny fragment: [pierwsze słowa]
 Status hipotezy: [obecna / implikowana / nieobecna]
 
 ---
+```
+
+Szablon wpisu do `logical-spine.md` (zawsze dopisuj pod odpowiednim nagłówkiem sekcji, zachowując numerację akapitów):
+```
+### [Nazwa Sekcji]
+- P[N]: [Jedno obszerne zdanie zawierające wszystkie informacje logiki merytorycznej: argument, dowód, powiązanie z literaturą, odniesienie do hipotezy]
+- P[N+1]: [...]
 ```
 
 ---
@@ -197,6 +207,15 @@ DRUGORZĘDNE (styl i efektywność — adresuj w polish pass)
 [Ten sam format, skrócony]
 
 OBSERWACJE POZYTYWNE (opcjonalnie — max 2)
+──────────────────────────────────────────
+[Krótkie wskazanie mocnych stron]
+
+MICRO-SYNTHESIS (EKSTRAKT LOGICZNY)
+───────────────────────────────────
+P[N]: [Jedno obszerne, techniczne zdanie precyzujące argument, użyte dowody, literaturę i powiązanie z hipotezą]
+P[N+1]: [...]
+
+HANDOFF BLOCK (skopiuj do następnej sesji)
 ──────────────────────────────────────────
 [Tylko gdy coś jest wyraźnie dobrze zrobione i warto to zachować.
 Nie dla zachęty — tylko dla informacji analitycznej.]

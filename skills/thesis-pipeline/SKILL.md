@@ -36,17 +36,14 @@ STAN 1 │ thesis-structure-decision
        │ Wymaga: rubryka (STAN 0).
        │ Kiedy: raz, zanim zaczniesz cokolwiek edytować lub analizować szczegółowo.
 
-STAN 2 │ thesis-macro-auditor
-       │ Ocenia architekturę pracy z lotu ptaka — czy sekcje pełnią swoją funkcję,
-       │ czy argumentacja jest spójna na poziomie całości, co brakuje, co jest zbędne.
+STAN 2 │ thesis-macro-auditor (Standard)
+       │ Ocenia architekturę pracy z lotu ptaka przed analizą.
        │ Wejście: spis treści + pierwsze i ostatnie zdanie każdej sekcji.
-       │ Wymaga: rubryka (STAN 0), decyzja struktury (STAN 1).
-       │ Kiedy: przed analizą mikro — i ZAWSZE gdy chcesz wrócić do widoku całości,
-       │ nawet po wykonaniu wielu sesji analizy szczegółowej.
+       │ Kiedy: przed analizą mikro by ocenić początkowy szkic szkieletu.
 
 STAN 3 │ thesis-analyzer
        │ Granularna analiza tekstu zdanie po zdaniu, akapit po akapicie.
-       │ Iteracyjna: ~800–1000 słów na sesję. Wynik: lista problemów + blok handoff.
+       │ Wynik: lista problemów, blok handoff oraz ekstrakt do logical-spine.md.
        │ Wymaga: rubryka + wyniki makro-audytu.
        │ Kiedy: po STAN 2; powtarzaj na każdy fragment pracy.
 
@@ -54,7 +51,12 @@ STAN 4 │ thesis-editor
        │ Jedyny skill który modyfikuje tekst. Implementuje zmiany na podstawie
        │ listy problemów z thesis-analyzer, thesis-macro-auditor lub thesis-reviewer.
        │ Wymaga: lista problemów z poprzedniego skilla diagnostycznego.
-       │ Kiedy: po każdej sesji analizy (STAN 3) lub po makro-audycie (STAN 2).
+       │ Kiedy: po każdej sesji analizy (STAN 3) lub po makro-audycie.
+
+DEEP MACRO│ thesis-macro-auditor (Deep Mode)
+       │ Powrót do analizy całości po zakończeniu STANU 3 z pełnym zarysem logiki.
+       │ Wejście: logical-spine.md — szczegółowy ciąg logiczny z każdego akapitu.
+       │ Kiedy: ZAWSZE gdy odbędziesz dogłębną analizę mikro (logical-spine.md zapełniony).
 
 STAN 5 │ thesis-reviewer
        │ Symuluje recenzję promotora WNE UW. Cztery tryby: Standard, Hostile,
@@ -74,35 +76,33 @@ AD-HOC │ thesis-section-writer
 
 Answer YES/NO to each question:
 
-1. Czy masz **rubrykę kalibracyjną** z `thesis-reference-calibrator`? (Jeśli tak — powinna być zapisana jako `rubric.md` w folderze projektu; jeśli nie — zacznij od `thesis-reference-calibrator`)
+1. Czy masz **rubrykę kalibracyjną** z `thesis-reference-calibrator`?
 2. Czy masz **decyzję strukturalną** (opcja A/B/C/D) z `thesis-structure-decision`?
-3. Czy masz **raport makro-audytu** z `thesis-macro-auditor`?
-4. Czy przeprowadziłeś przynajmniej jedną **sesję analizy mikro** (`thesis-analyzer`)?
-5. Czy masz **changelog z edycji** (`thesis-editor`)?
+3. Czy masz **raport makro-audytu** (Standard) z `thesis-macro-auditor`?
+4. Czy przeprowadziłeś analizę fragmentu w `thesis-analyzer` tak, że plik `logical-spine.md` zawiera już streszczenia logiki całej pracy (lub docelowego dużego wolumenu)?
+5. Czy wywołałeś powtórny **Deep Macro Audit** (`thesis-macro-auditor` wywołany przy istnieniu obszernego `logical-spine.md`) weryfikując architekturę na logice zrzuconej z STANU 3 i dokonałeś poprawek przez `thesis-editor`?
+6. Czy zatwierdziłeś wersję finalną do końcowej recenzji?
 
 | Ostatnie TAK | Stan | Co teraz |
 |---|---|---|
 | Żadne | — | Wywołaj `thesis-reference-calibrator` |
 | 1 | STAN 1 | Wywołaj `thesis-structure-decision` |
-| 2 | STAN 2 | Wywołaj `thesis-macro-auditor` |
-| 3 | STAN 3 | Wywołaj `thesis-analyzer` (następny fragment) |
-| 4 | STAN 4 | Wywołaj `thesis-editor` z listą problemów |
-| 5 | STAN 5 | Wywołaj `thesis-reviewer` |
+| 2 | STAN 2 | Wywołaj `thesis-macro-auditor` (Standard) |
+| 3 | STAN 3 | Wywołaj `thesis-analyzer` (na kolejnych fragmentach do skutku) i regularnie wracaj do `thesis-editor` |
+| 4 | DEEP MACRO | Z pełnym `logical-spine.md` wróć do `thesis-macro-auditor` (Deep Mode) aby ocenić spójność wyciągów akapitowych |
+| 5 | STAN 4 | Zakończ wprowadzanie poprawek strukturalnych w `thesis-editor` po raporcie DEEP MACRO |
+| 6 | STAN 5 | Wywołaj `thesis-reviewer` |
 
-**Uwaga:** Tabela podaje *typowy* następny krok — nie ścisłą kolejność. Możesz zawsze wrócić do wcześniejszego stanu. W szczególności:
-- Po wielu sesjach `thesis-analyzer` możesz wrócić do `thesis-macro-auditor` żeby sprawdzić czy praca jako całość się poprawiła
-- `thesis-editor` można wywołać po każdej sesji analizy, nie dopiero po analizie wszystkich sekcji
-- `thesis-section-writer` jest dostępny na każdym etapie
+**Uwaga:** Tabela podaje *typowy* następny krok — nie ścisłą kolejność. Możesz zawsze wrócić do wcześniejszego stanu.
 
 ---
 
-## When to call thesis-macro-auditor after micro-work
+## When to call thesis-macro-auditor after micro-work (Deep Mode)
 
-Wróć do `thesis-macro-auditor` gdy:
-- Skończyłeś analizę i edycję kilku sekcji i chcesz zobaczyć czy zmiany poprawiły spójność całości
-- Masz wątpliwości czy argumentacja na poziomie rozdziałów nadal trzyma się kupy po lokalnych zmianach
-- Promotor zgłosił uwagi strukturalne, a nie tylko stylistyczne
-- Nie byłeś w stanie dokończyć STAN 2 za pierwszym razem (np. brakowało materiału)
+Wróć do `thesis-macro-auditor` (który aktywuje się w postaci "Deep Mode" automatycznie widząc plik `logical-spine.md`) gdy:
+- Przeszedłeś wszystkie lub dużą część rozdziałów narzędziem `thesis-analyzer`.
+- Dysponujesz pełną ekstracją ("mapą argumentów" poszczególnych akapitów).
+- Masz cel upewnić się, czy na przestrzeni wszystkich argumentów hipoteza nadal jest trafnie udowadniana bez nagłych przeskoków i bez zgubienia logiki ze wstępu do wniosków.
 
 `thesis-macro-auditor` nie jest jednorazowy — jest dostępny na każdym etapie pracy.
 

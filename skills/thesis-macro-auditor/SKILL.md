@@ -63,20 +63,25 @@ If items 2–4 are missing, ask for them. Do not proceed without them. Item 1 is
 
 ## Orchestration procedure
 
-### Krok 0 — Załaduj rubryk kalibracyjny, session log i pryncypia akademickie
+### Krok 0 — Załaduj rubryk kalibracyjny, session log, logical spine i pryncypia akademickie
 
-**Przed wysłaniem agentów wykonaj trzy odczyty:**
+**Przed wysłaniem agentów wykonaj cztery odczyty:**
 
 **0. Session log (historia pracy):**
 Sprawdź czy plik `session-log.md` istnieje w folderze projektu użytkownika. Jeśli tak — wczytaj go narzędziem Read. Skorzystaj z niego by zrozumieć aktualny stan pracy (opcja strukturalna z STAN 1, wcześniejsze wyniki audytów). Jeśli nie ma pliku — kontynuuj bez niego (pierwsza sesja).
 
-**1. Rubryk kalibracyjny (opcjonalny plik projektu):**
+**1. Logical Spine (głęboki kontekst makro po analizie mikro):**
+Sprawdź czy plik `logical-spine.md` istnieje w folderze projektu użytkownika, albo w `outputs/logical-spine.md`. Plik ten zawiera szczegółowe streszczenia każdego z akapitów z poprzednich sesji analizy mikro.
+- Jeśli tak: Wczytaj go narzędziem Read i zachowaj. Uruchamia to **Deep Macro Mode**, a tym samym używasz pełnych streszczeń z `logical-spine.md` *zamiast* tylko wczytanego spisu treści i pierwszych/ostatnich zdań sekcji przy zleceniach dla agentów makro-audytu.
+- Jeśli nie: Kontynuuj na bazie standardowych wejść (spis treści + pierwsze i ostatnie zdania), co oznacza początkowy makro audyt przed rozpoczęciem analizy mikro.
+
+**2. Rubryk kalibracyjny (opcjonalny plik projektu):**
 Sprawdź czy plik `rubric.md` istnieje w folderze projektu użytkownika (zamontowanym folderze). Jeśli tak, wczytaj go narzędziem Read. Jeśli nie — sprawdź `outputs/rubric.md`. Jeśli nadal nie ma:
 - Zapytaj użytkownika: "Nie znalazłem pliku `rubric.md`. Czy możesz wkleić rubrykę kalibracyjną z `thesis-reference-calibrator`? Jeśli jej nie masz, mogę przeprowadzić audyt względem ogólnego standardu WNE."
 - Jeśli użytkownik wklei rubrykę — kontynuuj z nią.
 - Jeśli użytkownik potwierdzi brak rubryki — kontynuuj bez niej, ale zaznacz w raporcie: "UWAGA: Audyt bez rubryki wydziałowej — ocena względem ogólnego standardu WNE."
 
-**2. Pryncypia akademickie:**
+**3. Pryncypia akademickie:**
 Użyj narzędzia Read, aby wczytać plik `principles/academic-writing.md` z katalogu pluginu. Wyciągnij i zachowaj treść następującej kategorii:
 - **Kategoria A** (Structure & Narrative) — pryncypia A1–A7
 
@@ -94,7 +99,7 @@ Dispatch all six agents simultaneously using the Agent tool. Provide each agent 
 - The quality rubric
 - The research question / hypothesis
 - The structural decision (option chosen)
-- The table of contents + all first/last sentences
+- The thesis content outline. If in **Deep Macro Mode** (i.e. `logical-spine.md` was loaded), send the full content of `logical-spine.md` rather than just the first/last sentences and TOC. If not in deep mode, send the standard TOC + all first/last sentences.
 - The agent's specific scope
 - The academic writing principles block (category A) loaded in Krok 0
 
@@ -115,8 +120,9 @@ After the 6 section agents return, assess: does this thesis have two or more dis
 - The thesis has 3 or more major chapters with independent claims
 - `flow-auditor` returned findings related to two-part bridge or introduction-conclusion mismatch
 - The user explicitly asks for cross-chapter consistency check
+- **Deep Macro Mode** is active (which warrants a full semantic cross-check)
 
-If dispatching: compile chapter summaries from the first/last sentences already provided by the user (2–4 sentences per chapter). If the summaries are too sparse, ask the user for 2 sentences per chapter before dispatching.
+If dispatching: send either the `logical-spine.md` context (if in Deep mode) or compile chapter summaries from front/back sentences (if standard mode). If the non-deep summaries are too sparse, ask the user for 2 sentences per chapter before dispatching.
 
 If NOT dispatching: note "Cross-chapter audit skipped — single-structure thesis or insufficient cross-chapter risk." Do not dispatch unnecessarily — it adds model cost.
 
