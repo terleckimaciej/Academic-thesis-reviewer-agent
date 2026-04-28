@@ -1,7 +1,7 @@
 {
-  "name": "Academic-thesis-reviewer",
+  "name": "Academic-thesis-reviewer-agent",
   "metadata": {
-    "description": "Zestaw agentów i umiejętności do kompleksowego sprawdzania, edycji i poprawy prac dyplomowych.",
+    "description": "A set of agents and skills for comprehensive checking, editing, and improvement of academic theses.",
     "version": "1.0.0",
     "homepage": "https://github.com/terleckimaciej/Academic-thesis-reviewer-agent"
   },
@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "academic-thesis-reviewer",
-      "description": "Zbiór umiejętności oraz agentów wspomagających pisanie i recenzję pracy dyplomowej",
+      "description": "A collection of skills and agents to assist in writing and reviewing academic theses.",
       "source": "./",
       "strict": false,
       "skills": [
