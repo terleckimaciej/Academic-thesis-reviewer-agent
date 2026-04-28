@@ -1,7 +1,7 @@
 {
   "name": "Academic-thesis-reviewer-agent",
-  "version": "1.0.0",
-  "description": "WNE UW licencjat thesis refinement pipeline: single entry-point orchestrator (thesis-pipeline), parallel macro-audit, deep analysis, section writing, and viva simulation. 8 skills, 18 agents. Calibrated for economics / political science / political economy at WNE UW.",
+  "version": "1.1.0",
+  "description": "Academic thesis refinement pipeline: single entry-point orchestrator (thesis-pipeline), parallel macro-audit, deep analysis, section writing, and viva simulation. 8 skills, 18 agents. Calibrated for economics / political science / political economy. LaTeX (.tex) workflow: reads, analyses, and edits .tex files directly; outputs LaTeX-ready fragments.",
   "author": {
     "name": "maciej"
   },
